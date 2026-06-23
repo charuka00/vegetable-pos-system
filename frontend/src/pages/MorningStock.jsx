@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; // 👈 1. useState එක import කරගත්තා
 
-export default function MorningStock({ stocks, selectedDate, handleCostChange, handlePriceChange, handleOpeningChange }) {
+// ⚠️ 2. props ඇතුලට 'saveMorningDataToDB' එකතු කරා මෙතනට
+export default function MorningStock({ stocks, selectedDate, handleCostChange, handlePriceChange, handleOpeningChange, saveMorningDataToDB }) {
   const [showSummary, setShowSummary] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleConfirm = () => {
-    setShowSummary(true);
-    alert(`☀️ ${selectedDate} දින උදෑසන තොග සහ මිල ගණන් සාර්ථකව තහවුරු කරන ලදී!`);
+  const handleConfirm = async () => {
+    try {
+      // මෙතනදී 'saveMorningDataToDB' එක කලින් parameters වලින් ආපු හින්දා දැන් undefined වෙන්නේ නෑ
+      const success = await saveMorningDataToDB(); 
+      if (success) {
+        setShowSummary(true);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const totalCostValue = stocks.reduce((sum, item) => {
@@ -150,7 +158,7 @@ export default function MorningStock({ stocks, selectedDate, handleCostChange, h
                 );
               })}
               <tr className="bg-amber-50/50 font-bold text-gray-800">
-                <td colSpan="4" className="p-4 text-right text-base font-bold">මුළු බඩු වල වටිනාකම (Total Investment):</td>
+                <td colSpan="4" className="p-4 text-right text-base font-bold">අද උදේ මුළු බඩු වල වටිනාකම (Total Investment):</td>
                 <td className="p-4 text-right text-xl font-black text-amber-700">Rs. {totalCostValue}/=</td>
               </tr>
             </tbody>
