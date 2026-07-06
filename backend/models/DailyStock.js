@@ -13,7 +13,26 @@ const DailyStockSchema = new mongoose.Schema({
     closing: { type: Number, default: 0 },
     sold: { type: Number, default: 0 },
     revenue: { type: Number, default: 0 },
-    profit: { type: Number, default: 0 }
+    profit: { type: Number, default: 0 },
+    
+    // දවසේ වෙනත් වියදම් සේව් කරන කොටස
+    otherExpenses: [
+        {
+            description: String,
+            amount: Number
+        }
+    ],
+
+    // 👈 🆕 දිනපතා සේවක වැටුප් (Daily Staff Salaries) සේව් කිරීමට අලුතෙන් එකතු කල කොටස
+    staffSalaries: [
+        {
+            employeeName: String,
+            wages: Number
+        }
+    ],
+    
+    // එළවළු ලාභයෙන් (වෙනත් වියදම් + සේවක කුලී) අඩු කරලා එන නියම ශුද්ධ ලාභය
+    actualNetProfit: { type: Number, default: 0 }
 }, { timestamps: true });
 
 // එකම දවසේ, එකම එළවළු වර්ගය දෙපාරක් save වීම වැළැක්වීමට (Compound Index)
